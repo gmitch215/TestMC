@@ -1,0 +1,24 @@
+name: TestMC
+author: GamerCoder
+description: Tests a Minecraft Plugin on a Minecraft Server
+inputs:
+  runtime:
+    description: 'The server runtime to use for the action'
+    required: true
+
+  # Default Inputs
+  flags:
+    description: 'The flags to pass to the server'
+    required: false
+    default: ""
+  experimental:
+    description: 'Whether to use experimental builds'
+    required: false
+    default: "false"
+  use-similar-versions:
+    description: 'Whether to use found similar versions if the exact version is not found'
+    required: false
+    default: "true"
+runs:
+  using: 'node20'
+  main: 'index.js'
