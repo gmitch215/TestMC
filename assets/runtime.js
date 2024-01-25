@@ -1,3 +1,4 @@
+export default
 {
   "craftbukkit": {
     "download": "buildtools",

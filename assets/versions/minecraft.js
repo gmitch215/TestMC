@@ -1,4 +1,4 @@
-{
+export const versions = {
   "latest": "1.20.4",
   "versions": [
     "1.20.4",
@@ -105,4 +105,15 @@
   "experimental": [
     "1.13-pre7"
   ]
+}
+
+
+export function similar(version) {
+    for (const v in versions.similar_versions) {
+        if (versions.similar_versions[v].includes(version))
+            return v
+
+    }
+
+    return version
 }

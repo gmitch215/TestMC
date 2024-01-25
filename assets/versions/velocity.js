@@ -1,3 +1,4 @@
+export default
 {
   "latest": "3.3.0-SNAPSHOT",
   "versions": [
