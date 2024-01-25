@@ -1,7 +1,10 @@
-name: TestMC
+name: testermc
 author: GamerCoder
 description: Tests a Minecraft Plugin on a Minecraft Server
 inputs:
+  path:
+    description: 'The path to the plugin to test'
+    required: true
   runtime:
     description: 'The server runtime to use for the action'
     required: true
