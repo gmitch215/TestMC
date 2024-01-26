@@ -1,5 +1,4 @@
-export default
-{
+export const versions = {
   "latest": "3.3.0-SNAPSHOT",
   "versions": [
     "3.3.0-SNAPSHOT",
@@ -14,3 +13,5 @@ export default
     "1.0.10"
   ]
 }
+
+export const latest = versions.latest;

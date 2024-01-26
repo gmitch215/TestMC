@@ -1,5 +1,13 @@
-export default
-{
+import * as core from '@actions/core';
+
+export const BUILD_TOOLS_URL = "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar";
+
+export const BUILDS_WATERFALL = "https://api.papermc.io/v2/projects/waterfall/versions/{version}/builds"
+export const BUILDS_PAPER = "https://api.papermc.io/v2/projects/paper/versions/{version}/builds"
+export const BUILDS_PURPUR = "https://api.purpurmc.org/v2/purpur/{version}"
+
+
+export const runtimes = {
   "craftbukkit": {
     "download": "buildtools",
     "flags": "--rev {version} --compile craftbukkit",
@@ -19,6 +27,9 @@ export default
 
   "bungeecord": {
     "download": "git",
+    "url": "https://github.com/SpigotMC/BungeeCord.git",
+    "exec": "mvn clean install",
+    "target": "bootstrap/target/BungeeCord.jar",
     "versions": {
       "1.20.3": "a1cd694363a4adbd4dcf8c7f8680cb6faf16cf50",
       "1.20.2": "0dd7b984280869fad1617dc24a8685a1eb3c7846",
@@ -51,3 +62,5 @@ export default
     "url": "https://api.papermc.io/v2/projects/velocity/versions/{version}/builds/{build}/downloads/velocity-{version}-{build}.jar"
   }
 }
+
+export const current = core.getInput('runtime');
