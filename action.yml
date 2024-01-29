@@ -10,6 +10,9 @@ inputs:
     required: true
 
   # Default Inputs
+  version:
+    description: 'The version of the server to use'
+    required: false
   time:
     description: 'The time to run the server for, in seconds'
     required: false
