@@ -10,6 +10,10 @@ inputs:
     required: true
 
   # Default Inputs
+  time:
+    description: 'The time to run the server for, in seconds'
+    required: false
+    default: "10"
   flags:
     description: 'The flags to pass to the server'
     required: false
@@ -24,4 +28,4 @@ inputs:
     default: "true"
 runs:
   using: 'node20'
-  main: 'index.js'
+  main: 'src/index.js'
