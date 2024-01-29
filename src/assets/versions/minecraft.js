@@ -3,6 +3,7 @@ import * as core from '@actions/core'
 export const versions = {
     "latest": "1.20.4",
     "versions": [
+        // Versions must be found from https://hub.spigotmc.org/versions/
         "1.20.4",
         "1.20.3",
         "1.20.2",
@@ -51,24 +52,18 @@ export const versions = {
         "1.11",
 
         "1.10.2",
-        "1.10.1",
         "1.10",
 
         "1.9.4",
-        "1.9.3",
         "1.9.2",
-        "1.9.1",
         "1.9",
 
-        "1.8.9",
         "1.8.8",
         "1.8.7",
         "1.8.6",
         "1.8.5",
         "1.8.4",
         "1.8.3",
-        "1.8.2",
-        "1.8.1",
         "1.8"
     ],
     "similar_versions": {
@@ -115,19 +110,21 @@ export const versions = {
 }
 
 export const latest = versions.latest
-export const current = core.getInput("version").toLowerCase()
-export const experimental = core.getBooleanInput('experimental')
+export const current = core.getInput('version').toLowerCase() || latest
+export const experimental = core.getInput('experimental') === "true"
 
 export function similar(version) {
-    for (const v in versions.similar_versions) {
-        if (versions.similar_versions[v].includes(version))
-            return v;
+    for (const v in versions.similar_versions)
+        if (versions.similar_versions[v].includes(version)) return v;
 
-    }
 
     return version;
 }
 
 export function isAvailable(version) {
-    return versions.versions.includes(version) || (experimental && versions.experimental.includes(version))
+    let included = versions.versions.includes(version) || (experimental && versions.experimental.includes(version))
+    if (core.getInput('use-similar-versions') === "true")
+        included = included || versions.versions.includes(similar(version)) || (experimental && versions.experimental.includes(similar(version)))
+
+    return included
 }

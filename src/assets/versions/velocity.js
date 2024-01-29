@@ -14,4 +14,8 @@ export const versions = {
   ]
 }
 
-export const latest = versions.latest;
+export const latest = versions.latest
+
+export function isAvailable(version) {
+  return versions.versions.includes(version)
+}
