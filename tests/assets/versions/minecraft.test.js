@@ -1,5 +1,4 @@
 import {expect, test, describe} from '@jest/globals'
-import * as https from "https";
 
 import { latest, versions, similar, isAvailable } from '../../../src/assets/versions/minecraft'
 
