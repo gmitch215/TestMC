@@ -13,9 +13,9 @@ import {
     BUILDS_WATERFALL,
     current,
     runtimes
-} from '../assets/runtime';
-import * as versions from '../assets/versions/minecraft';
-import * as versionsVelocity from "../assets/versions/velocity";
+} from '../assets/runtime.js';
+import * as versions from '../assets/versions/minecraft.js';
+import * as versionsVelocity from "../assets/versions/velocity.js";
 
 export function getRuntime() {
     let runtime = runtimes[current];
@@ -27,7 +27,7 @@ export function getRuntime() {
 
 export function loadServer(callback) {
     const runtime = getRuntime()
-    const folder = fs.mkdtempSync('server')
+    const folder = fs.mkdtempSync('testmc-server-')
 
     if (runtime === 'velocity') {
         if (!versionsVelocity.isAvailable(versions.current))
@@ -39,9 +39,12 @@ export function loadServer(callback) {
 
     switch (runtime['download'] ?? 'url') {
         case 'buildtools': {
-            const buildtools = fs.mkdtempSync('buildtools')
+            const buildtools = `${folder}/buildtools`
+            fs.mkdirSync(buildtools)
+
             const jar = fs.createWriteStream(`${buildtools}/BuildTools.jar`)
-            const flags = runtime['flags'].replace('{version}', versions.current)
+            const flags = runtime['flags']
+                .replaceAll('{version}', versions.current)
 
             https.get(BUILD_TOOLS_URL, res => {
                 res.pipe(jar)
@@ -49,11 +52,11 @@ export function loadServer(callback) {
                 jar.on('finish', () => {
                     jar.close()
 
-                    exec(`java -jar BuildTools.jar ${flags}`, (error, stdout, stderr) => {
+                    exec(`java -jar ${buildtools}/BuildTools.jar ${flags}`, (error, stdout, stderr) => {
                         if (error) throw error;
                         if (stderr) throw new Error(stderr);
 
-                        fs.cpSync(`${buildtools}/${runtime['output'].replace('{version}', versions.current)}`, `${folder}/server.jar`)
+                        fs.cpSync(`${buildtools}/${runtime['output'].replaceAll('{version}', versions.current)}`, `${folder}/server.jar`)
                         callback(folder)
                     })
                 })
@@ -95,20 +98,20 @@ export function loadServer(callback) {
             let paper = true
             switch (current) {
                 case "paper": {
-                    buildsUrl = BUILDS_PAPER.replace('{version}', versions.current)
+                    buildsUrl = BUILDS_PAPER.replaceAll('{version}', versions.current)
                     break;
                 }
                 case "purpur": {
-                    buildsUrl = BUILDS_PURPUR.replace('{version}', versions.current)
+                    buildsUrl = BUILDS_PURPUR.replaceAll('{version}', versions.current)
                     paper = false
                     break;
                 }
                 case "waterfall": {
-                    buildsUrl = BUILDS_WATERFALL.replace('{version}', versions.current)
+                    buildsUrl = BUILDS_WATERFALL.replaceAll('{version}', versions.current)
                     break;
                 }
                 case "velocity": {
-                    buildsUrl = BUILDS_VELOCITY.replace('{version}', versions.current)
+                    buildsUrl = BUILDS_VELOCITY.replaceAll('{version}', versions.current)
                     break;
                 }
                 default: {
@@ -130,8 +133,8 @@ export function loadServer(callback) {
                         build = Number(json['builds']['latest'])
 
                     const url = runtime['url']
-                        .replace('{version}', versions.current)
-                        .replace('{build}', build)
+                        .replaceAll('{version}', versions.current)
+                        .replaceAll('{build}', build)
 
                     const jar = fs.createWriteStream(`${folder}/server.jar`)
 
@@ -156,9 +159,9 @@ export function loadServer(callback) {
 export function startServer(folder) {
     const flags = core.getInput('flags')
 
-    return spawn('java', ['-jar', 'server.html', 'nogui', ...flags.split(' ')], {
+    return spawn('java', ['-jar', 'server.jar', 'nogui', ...flags.split(' ')], {
         cwd: folder,
         detached: true,
-        stdio: 'ignore'
+        stdio: 'inherit'
     })
 }

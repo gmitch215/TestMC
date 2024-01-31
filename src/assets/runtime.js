@@ -63,4 +63,4 @@ export const runtimes = {
   }
 }
 
-export const current = core.getInput('runtime') || 'paper';
+export const current = core.getInput('runtime', { required: true })
