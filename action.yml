@@ -16,7 +16,7 @@ inputs:
   time:
     description: 'The time to run the server for, in seconds'
     required: false
-    default: "10"
+    default: "120"
   flags:
     description: 'The flags to pass to the server'
     required: false
