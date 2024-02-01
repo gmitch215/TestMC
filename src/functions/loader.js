@@ -11,7 +11,7 @@ import {
     BUILDS_PURPUR,
     BUILDS_VELOCITY,
     BUILDS_WATERFALL,
-    current,
+    current, HTTP_HEADERS,
     runtimes
 } from '../assets/runtime.js';
 import * as versions from '../assets/versions/minecraft.js';
@@ -46,16 +46,19 @@ export function loadServer(callback) {
             const flags = runtime['flags']
                 .replaceAll('{version}', versions.current)
 
-            https.get(BUILD_TOOLS_URL, res => {
+            https.get(BUILD_TOOLS_URL, { headers: HTTP_HEADERS }, res => {
                 res.pipe(jar)
 
                 jar.on('finish', () => {
                     jar.close()
 
-                    exec(`java -jar ${buildtools}/BuildTools.jar ${flags}`, (error, stdout, stderr) => {
-                        if (error) throw error;
-                        if (stderr) throw new Error(stderr);
+                    const exec = spawn('java', ['-jar', 'BuildTools.jar', ...flags.split(' ')], {
+                        cwd: buildtools,
+                        detached: true,
+                        stdio: 'inherit'
+                    })
 
+                    exec.on('exit', () => {
                         fs.cpSync(`${buildtools}/${runtime['output'].replaceAll('{version}', versions.current)}`, `${folder}/server.jar`)
                         callback(folder)
                     })
@@ -65,7 +68,8 @@ export function loadServer(callback) {
             break;
         }
         case 'git': {
-            const git = fs.mkdtempSync('git')
+            const git = `${folder}/git`
+            fs.mkdirSync(git)
             const repo = runtime['url']
             const target = runtime['output']
 
@@ -73,16 +77,21 @@ export function loadServer(callback) {
                 if (error) throw error;
                 if (stderr) throw new Error(stderr);
 
-                const copy = () => exec(runtime['exec'], (error, _, stderr) => {
-                    if (error) throw error;
-                    if (stderr) throw new Error(stderr);
+                const copy = () => {
+                    const exec = spawn(runtime['exec'], {
+                        cwd: git,
+                        detached: true,
+                        stdio: 'inherit'
+                    })
 
-                    fs.cpSync(`${git}/${target}`, `${folder}/server.jar`)
-                    callback(folder)
-                })
+                    exec.on('exit', () => {
+                        fs.cpSync(`${git}/${target}`, `${folder}/server.jar`)
+                        callback(folder)
+                    })
+                }
 
-                if (runtime['versions']['current'])
-                    exec(`git checkout ${runtime['versions']['current']}`, (error, _, stderr) => {
+                if (runtime['versions'][versions.current])
+                    exec(`git checkout ${runtime['versions'][versions.current]}`, (error, _, stderr) => {
                         if (error) throw error;
                         if (stderr) throw new Error(stderr);
 
@@ -119,7 +128,7 @@ export function loadServer(callback) {
                 }
             }
 
-            fetch(buildsUrl)
+            fetch(buildsUrl, { headers: HTTP_HEADERS })
                 .then(res => res.json())
                 .then(json => {
                     let build
@@ -138,7 +147,7 @@ export function loadServer(callback) {
 
                     const jar = fs.createWriteStream(`${folder}/server.jar`)
 
-                    https.get(url, res => {
+                    https.get(url, { headers: HTTP_HEADERS },res => {
                         res.pipe(jar)
 
                         jar.on('finish', () => {

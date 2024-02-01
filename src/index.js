@@ -6,7 +6,7 @@ try {
     loadServer((folder) => {
         core.info("Server Loaded!")
 
-        const plugin = core.getInput('path', {required: true}) || `${process.cwd()}/tests/plugin.jar`
+        const plugin = core.getInput('path', { required: true }) || `${process.cwd()}/tests/plugin.jar`
         if (!fs.existsSync(plugin)) throw new Error(`Plugin in '${plugin}' does not exist`)
 
         fs.mkdirSync(`${folder}/plugins`)
@@ -17,13 +17,17 @@ try {
         core.info("Plugin Loaded! Starting...")
 
         const server = startServer(folder)
-
-        setTimeout(() => {
+        const stop = () => {
             server.kill()
             core.info("Server Stopped!")
             fs.rmSync(folder, { recursive: true, force: true })
-        }, core.getInput('time') * 1000)
+        }
+
+        server.on('exit', stop)
+
+        setTimeout(stop, core.getInput('time') * 1000)
     })
 } catch (error) {
     core.setFailed(error.message);
+
 }

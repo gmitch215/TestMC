@@ -1,4 +1,10 @@
 import * as core from '@actions/core';
+import * as os from 'os';
+
+export const USER_AGENT = `TestMC GitHub Action/1.0.0 ${os.type()} ${os.machine()} ${os.version()}`;
+export const HTTP_HEADERS = {
+  "user-agent": USER_AGENT
+}
 
 export const BUILD_TOOLS_URL = "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar";
 
@@ -10,12 +16,12 @@ export const BUILDS_VELOCITY = "https://api.papermc.io/v2/projects/velocity/vers
 export const runtimes = {
   "craftbukkit": {
     "download": "buildtools",
-    "flags": "--rev {version} --compile craftbukkit",
+    "flags": "--rev {version} --compile craftbukkit --nogui",
     "output": "craftbukkit-{version}.jar"
   },
   "spigot": {
     "download": "buildtools",
-    "flags": "--rev {version}",
+    "flags": "--rev {version} --nogui",
     "output": "spigot-{version}.jar"
   },
   "paper": {
