@@ -2,3 +2,4 @@
 node_modules
 tests/plugin.jar
 testmc-server-*/
+.DS_Store
