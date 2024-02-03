@@ -6,7 +6,7 @@ try {
     loadServer((folder) => {
         core.info("Server Loaded!")
 
-        const plugin = core.getInput('path', { required: true }) || `${process.cwd()}/tests/plugin.jar`
+        const plugin = core.getInput('path', { required: true })
         if (!fs.existsSync(plugin)) throw new Error(`Plugin in '${plugin}' does not exist`)
 
         fs.mkdirSync(`${folder}/plugins`)
@@ -18,16 +18,35 @@ try {
 
         const server = startServer(folder)
         const stop = () => {
-            server.kill()
-            core.info("Server Stopped!")
-            fs.rmSync(folder, { recursive: true, force: true })
+            if (server.kill()) {
+                core.info("Server Stopped!")
+            } else {
+                core.error("Server Kill Required")
+                server.kill('SIGKILL')
+            }
+
+            fs.rmSync(folder, { recursive: true, force: true, maxRetries: 10, retryDelay: 1000 })
         }
 
-        server.on('exit', stop)
+        process.on('SIGINT', signal => {
+            server.emit('close', 128, signal)
+        })
+
+        server.stdout.on('data', (data) => {
+            process.stdout.write(`[SERVER] ${data.toString()}`)
+        })
+
+        server.stderr.on('data', (data) => {
+            process.stderr.write(`[SERVER] ${data.toString()}`)
+        })
+
+        server.on('close', (code, signal) => {
+            core.info(`Server Exited with code ${code} and signal ${signal}`)
+            stop()
+        })
 
         setTimeout(stop, core.getInput('time') * 1000)
     })
 } catch (error) {
     core.setFailed(error.message);
-
 }
