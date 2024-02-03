@@ -1,3 +1,3 @@
 // Set Inputs
-process.env['INPUT_TIME'] = '120'
-process.env['INPUT_RUNTIME'] = 'spigot'
+process.env['INPUT_TIME'] = '90'
+process.env['INPUT_RUNTIME'] = 'paper'
