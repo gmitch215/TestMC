@@ -55,7 +55,14 @@ export function loadServer(callback) {
                     const exec = spawn('java', ['-jar', 'BuildTools.jar', ...flags.split(' ')], {
                         cwd: buildtools,
                         detached: true,
-                        stdio: 'inherit'
+                    })
+
+                    exec.stdout.on('data', (data) => {
+                        process.stdout.write(`[BUILDTOOLS] ${data.toString()}`)
+                    })
+
+                    exec.stderr.on('data', (data) => {
+                        process.stderr.write(`[BUILDTOOLS] ${data.toString()}`)
                     })
 
                     exec.on('exit', () => {
@@ -79,9 +86,15 @@ export function loadServer(callback) {
 
                 const copy = () => {
                     const exec = spawn(runtime['exec'], {
-                        cwd: git,
-                        detached: true,
-                        stdio: 'inherit'
+                        cwd: git
+                    })
+
+                    exec.stdout.on('data', (data) => {
+                        process.stdout.write(`[BUILD] ${data.toString()}`)
+                    })
+
+                    exec.stderr.on('data', (data) => {
+                        process.stderr.write(`[BUILD] ${data.toString()}`)
                     })
 
                     exec.on('exit', () => {
@@ -131,15 +144,17 @@ export function loadServer(callback) {
             fetch(buildsUrl, { headers: HTTP_HEADERS })
                 .then(res => res.json())
                 .then(json => {
-                    let build
-                    if (paper) {
-                        const builds = json['builds']
-                        build = builds.reduce((acc, current) => {
-                            if (current.channel === "default" ) return current;
-                            return acc;
-                        }, null)['build'];
-                    } else
-                        build = Number(json['builds']['latest'])
+                    let build = core.getInput('build')
+                    if (!build) {
+                        if (paper) {
+                            const builds = json['builds']
+                            build = builds.reduce((acc, current) => {
+                                if (current.channel === "default") return current;
+                                return acc;
+                            }, null)['build'];
+                        } else
+                            build = Number(json['builds']['latest'])
+                    }
 
                     const url = runtime['url']
                         .replaceAll('{version}', versions.current)
@@ -149,6 +164,12 @@ export function loadServer(callback) {
 
                     https.get(url, { headers: HTTP_HEADERS },res => {
                         res.pipe(jar)
+
+                        if (res.statusCode !== 200) {
+                            jar.close()
+                            fs.rmSync(folder, { recursive: true, force: true, maxRetries: 10, retryDelay: 1000 })
+                            throw new Error(`Failed to download server.jar: ${res.statusMessage}`)
+                        }
 
                         jar.on('finish', () => {
                             jar.close()
@@ -171,6 +192,5 @@ export function startServer(folder) {
     return spawn('java', ['-jar', 'server.jar', 'nogui', ...flags.split(' ')], {
         cwd: folder,
         detached: true,
-        stdio: 'inherit'
     })
 }
