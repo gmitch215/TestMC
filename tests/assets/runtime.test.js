@@ -1,5 +1,6 @@
 import {expect, test} from '@jest/globals'
 
+import '../inputs.js'
 import {runtimes} from '../../src/assets/runtime.js'
 
 test('runtime.download', () => {
