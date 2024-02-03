@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "test-server": "node tests/server/index.js"
+    "test-server": "node tests/server/index.js",
+    "build": "ncc build"
   },
   "keywords": [],
   "author": "GamerCoder",
