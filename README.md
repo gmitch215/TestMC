@@ -5,8 +5,13 @@ A GitHub Action that sets up a Minecraft Server/Server Proxy to test your plugin
 
 > [!NOTE]
 > By using this GitHub Action you agree to the official [Minecraft EULA](https://www.minecraft.net/en-us/eula).
+> 
+> This GitHub Action is not affiliated with Mojang or Microsoft.
 
 ## 📦 Setup
+
+> [!WARNING]
+> Because of the way the server exists, it is impossible to determine when the server crashes or an error is detected in the server. This is planned to be changed in a future release.
 
 ### Example Files
 
@@ -49,6 +54,10 @@ jobs:
           time: 120
 ```
 
+> [!WARNING]
+> You will need to split your matrix builds into separate jobs if you are planning to use runtimes where different Java Versions are allowed.
+> For example, 1.8 does not support Java 16, while 1.17 does not support Java 8.
+
 ### All Options
 
 | Option Name            | Description                                                                                                             | Required | Default Value  |
@@ -57,6 +66,7 @@ jobs:
 | `runtime`              | The runtime option to use.                                                                                              | **true** |                |
 | `version`              | The runtime (Minecraft) version to use.                                                                                 | false    | latest version |
 | `time`                 | How long the server should run for, in seconds.                                                                         | false    | `120`          |
+| `build`                | Optionally specify a specific build number for your inputted runtime.                                                   | false    | latest build   |
 | `flags`                | Additional Flags to pass to the server jar.                                                                             | false    | ''             |
 | `experimental`         | Whether to allow experimental versions.                                                                                 | false    | `false`        |
 | `use-similar-versions` | Whether to find a similar version (determined by its protocol version) to use if the inputted version is not available. | false    | `true`         |
