@@ -1,6 +1,9 @@
 name: testermc
 author: GamerCoder
 description: Tests a Minecraft Plugin on a Minecraft Server
+branding:
+  icon: 'server'
+  color: green
 inputs:
   path:
     description: 'The path to the plugin to test'
