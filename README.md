@@ -23,7 +23,7 @@ jobs:
     # ...
     steps:
       - uses: actions/checkout@v4
-      - uses: GamerCoder215/testermc@v1
+      - uses: GamerCoder215/TestMC@v1
         with:
           path: 'path/to/plugin.jar'
           runtime: 'paper'
@@ -39,7 +39,7 @@ jobs:
     # ...
     steps:
       - uses: actions/checkout@v4
-      - uses: GamerCoder215/testermc@v1
+      - uses: GamerCoder215/TestMC@v1
         with:
           path: 'path/to/plugin/myplugin-*.jar'
           runtime: 'paper'
@@ -62,7 +62,7 @@ jobs:
     # ...
     steps:
       - uses: actions/checkout@v4
-      - uses: GamerCoder215/testermc@v1
+      - uses: GamerCoder215/TestMC@v1
         with:
           path: 'path/to/plugin.jar'
           runtime: ${{ matrix.runtime }}
