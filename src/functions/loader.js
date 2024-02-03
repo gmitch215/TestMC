@@ -11,11 +11,11 @@ import {
     BUILDS_PURPUR,
     BUILDS_VELOCITY,
     BUILDS_WATERFALL,
-    current,
+    current, HTTP_HEADERS,
     runtimes
-} from '../assets/runtime';
-import * as versions from '../assets/versions/minecraft';
-import * as versionsVelocity from "../assets/versions/velocity";
+} from '../assets/runtime.js';
+import * as versions from '../assets/versions/minecraft.js';
+import * as versionsVelocity from "../assets/versions/velocity.js";
 
 export function getRuntime() {
     let runtime = runtimes[current];
@@ -27,7 +27,7 @@ export function getRuntime() {
 
 export function loadServer(callback) {
     const runtime = getRuntime()
-    const folder = fs.mkdtempSync('server')
+    const folder = fs.mkdtempSync('testmc-server-')
 
     if (runtime === 'velocity') {
         if (!versionsVelocity.isAvailable(versions.current))
@@ -39,21 +39,27 @@ export function loadServer(callback) {
 
     switch (runtime['download'] ?? 'url') {
         case 'buildtools': {
-            const buildtools = fs.mkdtempSync('buildtools')
-            const jar = fs.createWriteStream(`${buildtools}/BuildTools.jar`)
-            const flags = runtime['flags'].replace('{version}', versions.current)
+            const buildtools = `${folder}/buildtools`
+            fs.mkdirSync(buildtools)
 
-            https.get(BUILD_TOOLS_URL, res => {
+            const jar = fs.createWriteStream(`${buildtools}/BuildTools.jar`)
+            const flags = runtime['flags']
+                .replaceAll('{version}', versions.current)
+
+            https.get(BUILD_TOOLS_URL, { headers: HTTP_HEADERS }, res => {
                 res.pipe(jar)
 
                 jar.on('finish', () => {
                     jar.close()
 
-                    exec(`java -jar BuildTools.jar ${flags}`, (error, stdout, stderr) => {
-                        if (error) throw error;
-                        if (stderr) throw new Error(stderr);
+                    const exec = spawn('java', ['-jar', 'BuildTools.jar', ...flags.split(' ')], {
+                        cwd: buildtools,
+                        detached: true,
+                        stdio: 'inherit'
+                    })
 
-                        fs.cpSync(`${buildtools}/${runtime['output'].replace('{version}', versions.current)}`, `${folder}/server.jar`)
+                    exec.on('exit', () => {
+                        fs.cpSync(`${buildtools}/${runtime['output'].replaceAll('{version}', versions.current)}`, `${folder}/server.jar`)
                         callback(folder)
                     })
                 })
@@ -62,7 +68,8 @@ export function loadServer(callback) {
             break;
         }
         case 'git': {
-            const git = fs.mkdtempSync('git')
+            const git = `${folder}/git`
+            fs.mkdirSync(git)
             const repo = runtime['url']
             const target = runtime['output']
 
@@ -70,16 +77,21 @@ export function loadServer(callback) {
                 if (error) throw error;
                 if (stderr) throw new Error(stderr);
 
-                const copy = () => exec(runtime['exec'], (error, _, stderr) => {
-                    if (error) throw error;
-                    if (stderr) throw new Error(stderr);
+                const copy = () => {
+                    const exec = spawn(runtime['exec'], {
+                        cwd: git,
+                        detached: true,
+                        stdio: 'inherit'
+                    })
 
-                    fs.cpSync(`${git}/${target}`, `${folder}/server.jar`)
-                    callback(folder)
-                })
+                    exec.on('exit', () => {
+                        fs.cpSync(`${git}/${target}`, `${folder}/server.jar`)
+                        callback(folder)
+                    })
+                }
 
-                if (runtime['versions']['current'])
-                    exec(`git checkout ${runtime['versions']['current']}`, (error, _, stderr) => {
+                if (runtime['versions'][versions.current])
+                    exec(`git checkout ${runtime['versions'][versions.current]}`, (error, _, stderr) => {
                         if (error) throw error;
                         if (stderr) throw new Error(stderr);
 
@@ -95,20 +107,20 @@ export function loadServer(callback) {
             let paper = true
             switch (current) {
                 case "paper": {
-                    buildsUrl = BUILDS_PAPER.replace('{version}', versions.current)
+                    buildsUrl = BUILDS_PAPER.replaceAll('{version}', versions.current)
                     break;
                 }
                 case "purpur": {
-                    buildsUrl = BUILDS_PURPUR.replace('{version}', versions.current)
+                    buildsUrl = BUILDS_PURPUR.replaceAll('{version}', versions.current)
                     paper = false
                     break;
                 }
                 case "waterfall": {
-                    buildsUrl = BUILDS_WATERFALL.replace('{version}', versions.current)
+                    buildsUrl = BUILDS_WATERFALL.replaceAll('{version}', versions.current)
                     break;
                 }
                 case "velocity": {
-                    buildsUrl = BUILDS_VELOCITY.replace('{version}', versions.current)
+                    buildsUrl = BUILDS_VELOCITY.replaceAll('{version}', versions.current)
                     break;
                 }
                 default: {
@@ -116,7 +128,7 @@ export function loadServer(callback) {
                 }
             }
 
-            fetch(buildsUrl)
+            fetch(buildsUrl, { headers: HTTP_HEADERS })
                 .then(res => res.json())
                 .then(json => {
                     let build
@@ -130,12 +142,12 @@ export function loadServer(callback) {
                         build = Number(json['builds']['latest'])
 
                     const url = runtime['url']
-                        .replace('{version}', versions.current)
-                        .replace('{build}', build)
+                        .replaceAll('{version}', versions.current)
+                        .replaceAll('{build}', build)
 
                     const jar = fs.createWriteStream(`${folder}/server.jar`)
 
-                    https.get(url, res => {
+                    https.get(url, { headers: HTTP_HEADERS },res => {
                         res.pipe(jar)
 
                         jar.on('finish', () => {
@@ -156,9 +168,9 @@ export function loadServer(callback) {
 export function startServer(folder) {
     const flags = core.getInput('flags')
 
-    return spawn('java', ['-jar', 'server.html', 'nogui', ...flags.split(' ')], {
+    return spawn('java', ['-jar', 'server.jar', 'nogui', ...flags.split(' ')], {
         cwd: folder,
         detached: true,
-        stdio: 'ignore'
+        stdio: 'inherit'
     })
 }
