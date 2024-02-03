@@ -1,0 +1,65 @@
+name: Report a Bug
+description: Report a TestMC Bug.
+labels: ['unconfirmed bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a TestMC bug. Please take time to fill out the information below.
+  - type: dropdown
+    attributes:
+      label: Bug Type
+      description: What type of bug are you trying to report?
+      multiple: true
+      options:
+        - Performance
+        - Compatibility
+        - General Bug
+        - Fails Unexpectedly
+        - Unexpected Behavior
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: TestMC Version
+      description: What version of TestMC are you using?
+      placeholder: |
+        Ex: v1.0.0
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Description
+      placeholder: |
+        Ex: "Action does not recognize latest version 1.xx.x"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: What you expect the plugin to do.
+      placeholder: |
+        Ex: "Executes as normal"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Actual Behavior
+      description: What does the plugin do? What are the error messages shown?
+      placeholder: |
+        Ex: "Fails because latest version is not recognized"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Other Information
+      description: Attach any other relevant info or files that may help us solve the bug, as well as any other information.
+      placeholder: |
+        Ex: "Console errors, screenshots, etc."
+    validations:
+      required: false
