@@ -31,6 +31,22 @@ jobs:
           time: 120
 ```
 
+Globs are also supported, in which case the first result is used:
+
+```yaml
+jobs:
+  test:
+    # ...
+    steps:
+      - uses: actions/checkout@v4
+      - uses: GamerCoder215/testermc@v1
+        with:
+          path: 'path/to/plugin/myplugin-*.jar'
+          runtime: 'paper'
+          version: '1.20.2'
+          time: 240
+```
+
 #### Using Matrix Builds
 
 > [!TIP]

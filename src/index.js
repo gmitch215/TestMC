@@ -1,13 +1,15 @@
 import * as core from '@actions/core';
 import {loadServer, startServer} from "./functions/loader.js";
 import fs from "fs";
+import { globSync } from 'glob';
 
 try {
     loadServer((folder) => {
         core.info("Server Loaded!")
 
-        const plugin = core.getInput('path', { required: true })
-        if (!fs.existsSync(plugin)) throw new Error(`Plugin in '${plugin}' does not exist`)
+        const path = core.getInput('path', { required: true })
+        const plugin = globSync(path)[0]
+        if (!fs.existsSync(plugin)) throw new Error(`No files found in '${path}'`)
 
         fs.mkdirSync(`${folder}/plugins`)
         fs.cpSync(plugin, `${folder}/plugins/plugin.jar`)
