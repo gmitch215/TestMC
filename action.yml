@@ -13,6 +13,9 @@ inputs:
   version:
     description: 'The version of the server to use'
     required: false
+  build:
+    description: 'Specifies a specific build of the runtime to use'
+    required: false
   time:
     description: 'The time to run the server for, in seconds'
     required: false
