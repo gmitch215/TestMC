@@ -27,12 +27,12 @@ try {
                 server.kill('SIGKILL')
             }
 
-            fs.rmSync(folder, { recursive: true, force: true, maxRetries: 10, retryDelay: 1000 })
+            setTimeout(() => {
+                fs.rmSync(folder, { recursive: true, force: true, maxRetries: 10, retryDelay: 1000 })
+            }, 10_000)
         }
 
-        process.on('SIGINT', signal => {
-            server.emit('close', 128, signal)
-        })
+        process.on('SIGINT', stop)
 
         server.stdout.on('data', (data) => {
             process.stdout.write(`[SERVER] ${data.toString()}`)
@@ -40,11 +40,6 @@ try {
 
         server.stderr.on('data', (data) => {
             process.stderr.write(`[SERVER] ${data.toString()}`)
-        })
-
-        server.on('close', (code, signal) => {
-            core.info(`Server Exited with code ${code} and signal ${signal}`)
-            stop()
         })
 
         setTimeout(stop, core.getInput('time') * 1000)

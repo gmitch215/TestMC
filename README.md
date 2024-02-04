@@ -23,7 +23,7 @@ jobs:
     # ...
     steps:
       - uses: actions/checkout@v4
-      - uses: GamerCoder215/TestMC@v1
+      - uses: GamerCoder215/TestMC@v1.0.1
         with:
           path: 'path/to/plugin.jar'
           runtime: 'paper'
@@ -39,7 +39,7 @@ jobs:
     # ...
     steps:
       - uses: actions/checkout@v4
-      - uses: GamerCoder215/TestMC@v1
+      - uses: GamerCoder215/TestMC@v1.0.1
         with:
           path: 'path/to/plugin/myplugin-*.jar'
           runtime: 'paper'
@@ -62,17 +62,13 @@ jobs:
     # ...
     steps:
       - uses: actions/checkout@v4
-      - uses: GamerCoder215/TestMC@v1
+      - uses: GamerCoder215/TestMC@v1.0.1
         with:
           path: 'path/to/plugin.jar'
           runtime: ${{ matrix.runtime }}
           version: ${{ matrix.version }}
           time: 120
 ```
-
-> [!WARNING]
-> You will need to split your matrix builds into separate jobs if you are planning to use runtimes where different Java Versions are allowed.
-> For example, 1.8 does not support Java 16, while 1.17 does not support Java 8.
 
 ### All Options
 
