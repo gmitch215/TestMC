@@ -1,11 +1,12 @@
 # 🔬 TestMC
+
 > A GitHub Action to test Minecraft Plugins on a Server for a Specific Version
 
 A GitHub Action that sets up a Minecraft Server/Server Proxy to test your plugins on.
 
 > [!NOTE]
 > By using this GitHub Action you agree to the official [Minecraft EULA](https://www.minecraft.net/en-us/eula).
-> 
+>
 > This GitHub Action is not affiliated with Mojang or Microsoft.
 
 ## 📦 Setup
@@ -23,11 +24,15 @@ jobs:
     # ...
     steps:
       - uses: actions/checkout@v4
-      - uses: GamerCoder215/TestMC@v1.0.1
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - uses: gmitch215/TestMC@v1
         with:
           path: 'path/to/plugin.jar'
           runtime: 'paper'
-          version: '1.20.1'
+          version: '1.20.5'
           time: 120
 ```
 
@@ -39,11 +44,15 @@ jobs:
     # ...
     steps:
       - uses: actions/checkout@v4
-      - uses: GamerCoder215/TestMC@v1.0.1
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: gmitch215/TestMC@v1
         with:
           path: 'path/to/plugin/myplugin-*.jar'
           runtime: 'paper'
-          version: '1.20.2'
+          version: '1.20.4'
           time: 240
 ```
 
@@ -62,7 +71,11 @@ jobs:
     # ...
     steps:
       - uses: actions/checkout@v4
-      - uses: GamerCoder215/TestMC@v1.0.1
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: gmitch215/TestMC@v1
         with:
           path: 'path/to/plugin.jar'
           runtime: ${{ matrix.runtime }}
@@ -89,12 +102,13 @@ jobs:
 
 **Minimum Version**: 1.8
 
-**Latest Version**: 1.20.4 (1-31-2024)
+**Latest Version**: 1.20.5 (4-24-2024)
 
 **Latest Experimental Version**: 1.18-rc3 (1-31-2024)
 
 > [!WARNING]
 > The following versions are not guaranteed to be available:
+>
 > - 1.8.1, 1.8.2, 1.8.9
 > - 1.9.1, 1.9.3,
 > - 1.10.1
@@ -103,12 +117,14 @@ jobs:
 ### Runtimes
 
 #### Servers
+
 - [x] CraftBukkit (`craftbukkit`)
 - [x] SpigotMC (`spigot`)
 - [x] PaperMC (`paper`)
 - [x] Purpur (`purpur`)
 
 #### Server Proxies
+
 - [x] Bungeecord (`bungeecord`)
 - [x] Waterfall (`waterfall`)
 - [x] Velocity (`velocity`)

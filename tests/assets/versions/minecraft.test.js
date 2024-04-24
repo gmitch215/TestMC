@@ -24,6 +24,7 @@ describe('minecraft functions', () => {
     test('minecraft#isAvailable', () => {
         expect(isAvailable(latest)).toBe(true)
 
+        expect(isAvailable('1.20.5')).toBe(true)
         expect(isAvailable('1.20.4')).toBe(true)
         expect(isAvailable('1.19.1')).toBe(true)
         expect(isAvailable('1.19')).toBe(true)

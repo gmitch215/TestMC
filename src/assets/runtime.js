@@ -37,6 +37,7 @@ export const runtimes = {
     "exec": "mvn clean install",
     "output": "bootstrap/target/BungeeCord.jar",
     "versions": {
+      "1.20.5": "6f70b15e2ea7f01e9d8690e56d476cfcfc68ef2c",
       "1.20.3": "a1cd694363a4adbd4dcf8c7f8680cb6faf16cf50",
       "1.20.2": "0dd7b984280869fad1617dc24a8685a1eb3c7846",
       "1.20.1": "68200133b6aa06d9fd257e47c11cfe734ec001bf",

@@ -1,0 +1,23 @@
+name: Release Action Version
+
+on:
+  release:
+    types: [released]
+
+env:
+  TAG_NAME: ${{ github.event.release.tag_name }}
+permissions:
+  contents: write
+
+jobs:
+  update_tag:
+    name: Update Major Tag
+    environment:
+      name: releaseNewActionVersion
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update ${{ env.TAG_NAME }} Tag
+        id: update-major-tag
+        uses: actions/publish-action@v0.2.2
+        with:
+          source-tag: ${{ env.TAG_NAME }}
