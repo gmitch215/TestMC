@@ -18,6 +18,6 @@ jobs:
     steps:
       - name: Update ${{ env.TAG_NAME }} Tag
         id: update-major-tag
-        uses: actions/publish-action@v0.2.2
+        uses: actions/publish-action@v0.3.0
         with:
           source-tag: ${{ env.TAG_NAME }}
