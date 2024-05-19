@@ -26838,6 +26838,7 @@ const runtimes = {
     "exec": "mvn clean install",
     "output": "bootstrap/target/BungeeCord.jar",
     "versions": {
+      "1.20.5": "6f70b15e2ea7f01e9d8690e56d476cfcfc68ef2c",
       "1.20.3": "a1cd694363a4adbd4dcf8c7f8680cb6faf16cf50",
       "1.20.2": "0dd7b984280869fad1617dc24a8685a1eb3c7846",
       "1.20.1": "68200133b6aa06d9fd257e47c11cfe734ec001bf",
@@ -26875,9 +26876,11 @@ const current = core.getInput('runtime', { required: true })
 
 
 const versions = {
-    "latest": "1.20.4",
+    "latest": "1.20.6",
     "versions": [
         // Versions must be found from https://hub.spigotmc.org/versions/
+        "1.20.6",
+        "1.20.5",
         "1.20.4",
         "1.20.3",
         "1.20.2",
@@ -26941,6 +26944,7 @@ const versions = {
         "1.8"
     ],
     "similar_versions": {
+        "1.20.6": ["1.20.5"],
         "1.20.4": ["1.20.3"],
         "1.20.1": ["1.20"],
 
@@ -34778,12 +34782,12 @@ try {
                 server.kill('SIGKILL')
             }
 
-            external_fs_.rmSync(folder, { recursive: true, force: true, maxRetries: 10, retryDelay: 1000 })
+            setTimeout(() => {
+                external_fs_.rmSync(folder, { recursive: true, force: true, maxRetries: 10, retryDelay: 1000 })
+            }, 10_000)
         }
 
-        process.on('SIGINT', signal => {
-            server.emit('close', 128, signal)
-        })
+        process.on('SIGINT', stop)
 
         server.stdout.on('data', (data) => {
             process.stdout.write(`[SERVER] ${data.toString()}`)
@@ -34791,11 +34795,6 @@ try {
 
         server.stderr.on('data', (data) => {
             process.stderr.write(`[SERVER] ${data.toString()}`)
-        })
-
-        server.on('close', (code, signal) => {
-            core.info(`Server Exited with code ${code} and signal ${signal}`)
-            stop()
         })
 
         setTimeout(stop, core.getInput('time') * 1000)
