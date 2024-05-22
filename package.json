@@ -23,7 +23,7 @@
   "dependencies": {
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.0",
-    "glob": "^10.3.15",
+    "glob": "^10.3.16",
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
