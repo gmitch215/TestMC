@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import * as os from 'os';
 
-export const USER_AGENT = `TestMC GitHub Action/1.0.0 ${os.type()} ${os.machine()} ${os.version()}`;
+export const USER_AGENT = `TestMC GitHub Action ${os.type()} ${os.machine()} ${os.version()}`;
 export const HTTP_HEADERS = {
   "user-agent": USER_AGENT
 }
