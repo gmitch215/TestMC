@@ -14,12 +14,12 @@
   "license": "LGPL-3.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GamerCoder215/TestMC.git"
+    "url": "git+https://github.com/gmitch215/TestMC.git"
   },
   "bugs": {
-    "url": "https://github.com/GamerCoder215/TestMC/issues"
+    "url": "https://github.com/gmitch215/TestMC/issues"
   },
-  "homepage": "https://github.com/GamerCoder215/TestMC#readme",
+  "homepage": "https://github.com/gmitch215/TestMC#readme",
   "dependencies": {
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.0",
