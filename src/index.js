@@ -24,7 +24,7 @@ try {
                 core.info("Server Stopped!")
             } else {
                 core.error("Server Kill Required")
-                server.kill('SIGKILL')
+                server.kill('SIGSTOP')
             }
 
             setTimeout(() => {
