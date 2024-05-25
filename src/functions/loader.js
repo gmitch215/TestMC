@@ -148,10 +148,10 @@ export function loadServer(callback) {
                     if (!build) {
                         if (paper) {
                             const builds = json['builds']
-                            build = builds.reduce((acc, current) => {
+                            build = builds.reduce((def, current) => {
                                 if (current.channel === "default") return current;
-                                return acc;
-                            }, null)['build'];
+                                return def;
+                            }, builds.at(-1))['build'];
                         } else
                             build = Number(json['builds']['latest'])
                     }
