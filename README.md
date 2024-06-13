@@ -126,7 +126,7 @@ jobs:
 | `experimental`         | Whether to allow experimental versions.                                                                                 | false               | `false`        |
 | `use-similar-versions` | Whether to find a similar version (determined by its protocol version) to use if the inputted version is not available. | false               | `true`         |
 | `commands`             | Commands to execute on the server after startup has finished.                                                           | false               | ''             |
-| `dir`                  | A directory to copy into the server directory, before it starts.                                                        | false               | ''             |
+| `files`                | A directory to copy into the server directory, before it starts.                                                        | false               | ''             |
 
 ## 📕 Platforms
 
