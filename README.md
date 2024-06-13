@@ -2,7 +2,7 @@
 
 > A GitHub Action to test Minecraft Plugins on a Server for a Specific Version
 
-A GitHub Action that sets up a Minecraft Server/Server Proxy to test your plugins on.
+A GitHub Action that sets up a Minecraft Server/Server Proxy to test your mods and plugins on.
 
 > [!NOTE]
 > By using this GitHub Action you agree to the official [Minecraft EULA](https://www.minecraft.net/en-us/eula).
@@ -81,21 +81,52 @@ jobs:
           runtime: ${{ matrix.runtime }}
           version: ${{ matrix.version }}
           time: 120
+          commands: |
+            version
+```
+
+#### Using a Directory
+
+You can copy a directory into the server directory before the server starts. This can be useful for specifying a `server.properties`, custom world files, etc:
+
+```yaml
+jobs:
+  test:
+    # ...
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - uses: gmitch215/TestMC@v2
+        with:
+          path: 'path/to/plugin.jar'
+          runtime: 'purpur'  
+          version: '1.21'
+          time: 360
+          files: | # Supports Globs; Can contain anything you want to copy
+            .github/test-server/* 
+            server.properties
+          commands: |
+            customplace 0 10 0 stone
+            kill @e[type=!player]
 ```
 
 ### All Options
 
-| Option Name            | Description                                                                                                             | Required | Default Value  |
-|------------------------|-------------------------------------------------------------------------------------------------------------------------|----------|----------------|
-| `path`                 | The path to the plugin to test.                                                                                         | **true** |                |
-| `runtime`              | The runtime option to use.                                                                                              | **true** |                |
-| `version`              | The runtime (Minecraft) version to use.                                                                                 | false    | latest version |
-| `time`                 | How long the server should run for, in seconds.                                                                         | false    | `120`          |
-| `build`                | Optionally specify a specific build number for your inputted runtime.                                                   | false    | latest build   |
-| `flags`                | Additional Flags to pass to the server jar.                                                                             | false    | ''             |
-| `experimental`         | Whether to allow experimental versions.                                                                                 | false    | `false`        |
-| `use-similar-versions` | Whether to find a similar version (determined by its protocol version) to use if the inputted version is not available. | false    | `true`         |
-| `commands`             | Commands to execute on the server after startup has finished.                                                           | false    | ''             |
+| Option Name            | Description                                                                                                             | Required            | Default Value  |
+|------------------------|-------------------------------------------------------------------------------------------------------------------------|---------------------|----------------|
+| `path`                 | The path to the plugin to test.                                                                                         | **true**            |                |
+| `runtime`              | The runtime option to use.                                                                                              | **true**            |                |
+| `version`              | The runtime (Minecraft) version to use.                                                                                 | false               | latest version |
+| `time`                 | How long the server should run for, in seconds.                                                                         | false               | `120`          |
+| `build`                | Optionally specify a specific build number for your inputted runtime.                                                   | on `fabric` servers | latest build   |
+| `flags`                | Additional Flags to pass to the server jar.                                                                             | false               | ''             |
+| `experimental`         | Whether to allow experimental versions.                                                                                 | false               | `false`        |
+| `use-similar-versions` | Whether to find a similar version (determined by its protocol version) to use if the inputted version is not available. | false               | `true`         |
+| `commands`             | Commands to execute on the server after startup has finished.                                                           | false               | ''             |
+| `dir`                  | A directory to copy into the server directory, before it starts.                                                        | false               | ''             |
 
 ## 📕 Platforms
 
@@ -123,6 +154,9 @@ jobs:
 - [x] SpigotMC (`spigot`)
 - [x] PaperMC (`paper`)
 - [x] Purpur (`purpur`)
+- [x] Fabric (`fabric`)
+  - Your `build` option is **required** and should be specified as `loader version/installer version` (e.g. `0.15.11/1.0.1`).
+  - To find your build, visit the [Server Downloader](https://fabricmc.net/use/server/).
 
 #### Server Proxies
 
