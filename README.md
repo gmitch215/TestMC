@@ -28,11 +28,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: gmitch215/TestMC@v1
+      - uses: gmitch215/TestMC@v2
         with:
           path: 'path/to/plugin.jar'
           runtime: 'paper'
-          version: '1.20.5'
+          version: '1.21'
           time: 120
 ```
 
@@ -47,12 +47,12 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
-      - uses: gmitch215/TestMC@v1
+          java-version: '21'
+      - uses: gmitch215/TestMC@v2
         with:
           path: 'path/to/plugin/myplugin-*.jar'
           runtime: 'paper'
-          version: '1.20.4'
+          version: '1.21'
           time: 240
 ```
 
@@ -75,7 +75,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: gmitch215/TestMC@v1
+      - uses: gmitch215/TestMC@v2
         with:
           path: 'path/to/plugin.jar'
           runtime: ${{ matrix.runtime }}
@@ -95,6 +95,7 @@ jobs:
 | `flags`                | Additional Flags to pass to the server jar.                                                                             | false    | ''             |
 | `experimental`         | Whether to allow experimental versions.                                                                                 | false    | `false`        |
 | `use-similar-versions` | Whether to find a similar version (determined by its protocol version) to use if the inputted version is not available. | false    | `true`         |
+| `commands`             | Commands to execute on the server after startup has finished.                                                           | false    | ''             |
 
 ## 📕 Platforms
 
@@ -102,7 +103,7 @@ jobs:
 
 **Minimum Version**: 1.8
 
-**Latest Version**: 1.20.5 (4-24-2024)
+**Latest Version**: 1.21 (6-13-2024)
 
 **Latest Experimental Version**: 1.18-rc3 (1-31-2024)
 
