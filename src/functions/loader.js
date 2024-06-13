@@ -116,6 +116,7 @@ export function loadServer(callback) {
             break;
         }
         case 'url': {
+            let build = core.getInput('build')
             let buildsUrl = ""
             let paper = true
             switch (current) {
@@ -136,47 +137,62 @@ export function loadServer(callback) {
                     buildsUrl = BUILDS_VELOCITY.replaceAll('{version}', versions.current)
                     break;
                 }
+                case "fabric": {
+                    if (!build) throw new TypeError("Fabric loaders require 'build' parameter to be set (ex: '0.11.5/1.0.1')")
+                    break;
+                }
                 default: {
                     throw new TypeError(`Download method ${runtime['download']} not found: Could not find {build} for ${current}`);
                 }
             }
 
-            fetch(buildsUrl, { headers: HTTP_HEADERS })
-                .then(res => res.json())
-                .then(json => {
-                    let build = core.getInput('build')
-                    if (!build) {
-                        if (paper) {
-                            const builds = json['builds']
-                            build = builds.reduce((def, current) => {
-                                if (current.channel === "default") return current;
-                                return def;
-                            }, builds.at(-1))['build'];
-                        } else
-                            build = Number(json['builds']['latest'])
+            function load(url, callback) {
+                const jar = fs.createWriteStream(`${folder}/server.jar`)
+
+                https.get(url, { headers: HTTP_HEADERS },res => {
+                    res.pipe(jar)
+
+                    if (res.statusCode !== 200) {
+                        jar.close()
+                        fs.rmSync(folder, { recursive: true, force: true, maxRetries: 10, retryDelay: 1000 })
+                        throw new Error(`Failed to download server.jar: ${res.statusMessage}`)
                     }
 
-                    const url = runtime['url']
-                        .replaceAll('{version}', versions.current)
-                        .replaceAll('{build}', build)
+                    jar.on('finish', () => {
+                        jar.close()
+                        callback(folder)
+                    })
+                })
+            }
 
-                    const jar = fs.createWriteStream(`${folder}/server.jar`)
+            if (!buildsUrl) {
+                const url = runtime['url']
+                    .replaceAll('{version}', versions.current)
+                    .replaceAll('{build}', build)
 
-                    https.get(url, { headers: HTTP_HEADERS },res => {
-                        res.pipe(jar)
-
-                        if (res.statusCode !== 200) {
-                            jar.close()
-                            fs.rmSync(folder, { recursive: true, force: true, maxRetries: 10, retryDelay: 1000 })
-                            throw new Error(`Failed to download server.jar: ${res.statusMessage}`)
+                load(url, callback)
+            } else {
+                fetch(buildsUrl, {headers: HTTP_HEADERS})
+                    .then(res => res.json())
+                    .then(json => {
+                        if (!build) {
+                            if (paper) {
+                                const builds = json['builds']
+                                build = builds.reduce((def, current) => {
+                                    if (current.channel === "default") return current;
+                                    return def;
+                                }, builds.at(-1))['build'];
+                            } else
+                                build = Number(json['builds']['latest'])
                         }
 
-                        jar.on('finish', () => {
-                            jar.close()
-                            callback(folder)
-                        })
+                        const url = runtime['url']
+                            .replaceAll('{version}', versions.current)
+                            .replaceAll('{build}', build)
+
+                        load(url, callback)
                     })
-            })
+            }
 
             break;
         }
