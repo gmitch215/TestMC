@@ -16,15 +16,26 @@ try {
 
         fs.writeFileSync(`${folder}/eula.txt`, 'eula=true')
 
+        const files = core.getMultilineInput('files')
+        if (files) {
+            const files0 = globSync(files)
+
+            if (files0.length)
+                for (const file of files0) fs.cpSync(file, `${folder}/${file}`)
+        }
+
         core.info("Plugin Loaded! Starting...")
 
         const server = startServer(folder)
         const stop = () => {
+            if (server.exitCode) return
+
+            server.stdin.end()
             if (server.kill()) {
                 core.info("Server Stopped!")
             } else {
                 core.error("Server Kill Required")
-                server.kill('SIGSTOP')
+                server.kill('SIGKILL')
             }
 
             setTimeout(() => {
@@ -41,6 +52,14 @@ try {
         server.stderr.on('data', (data) => {
             process.stderr.write(`[SERVER] ${data.toString()}`)
         })
+
+        const commands = core.getMultilineInput('commands')
+        if (commands) {
+            server.stdin.setDefaultEncoding('utf-8')
+            commands.forEach(command => server.stdin.write(`${command}\n`, err => {
+                if (err) process.stderr.write(`[SERVER] ${err}`)
+            }))
+        }
 
         setTimeout(stop, core.getInput('time') * 1000)
     })

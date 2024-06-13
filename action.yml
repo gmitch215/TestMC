@@ -35,6 +35,14 @@ inputs:
     description: 'Whether to use found similar versions if the exact version is not found'
     required: false
     default: "true"
+  commands:
+    description: 'The commands to run on the server after startup'
+    required: false
+    default: ""
+  files:
+    description: 'Files to copy into the server before it begins'
+    required: false
+    default: ""
 runs:
   using: 'node20'
   main: 'dist/index.js'
