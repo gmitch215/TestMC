@@ -30,9 +30,9 @@ jobs:
           java-version: '21'
       - uses: gmitch215/TestMC@v2
         with:
+          # Runs Latest Version
           path: 'path/to/plugin.jar'
           runtime: 'paper'
-          version: '1.21'
           time: 120
 ```
 
@@ -52,7 +52,7 @@ jobs:
         with:
           path: 'path/to/plugin/myplugin-*.jar'
           runtime: 'paper'
-          version: '1.21'
+          version: '1.21.1' # Specify a Version
           time: 240
 ```
 
@@ -67,7 +67,7 @@ jobs:
     strategy:
       matrix:
         runtime: ['paper', 'spigot']
-        version: ['1.20.1', '1.20.2', '1.20.4']
+        version: ['1.20.1', '1.20.2', '1.20.4', '1.20.6']
     # ...
     steps:
       - uses: actions/checkout@v4
@@ -134,7 +134,7 @@ jobs:
 
 **Minimum Version**: 1.8
 
-**Latest Version**: 1.21 (6-13-2024)
+**Latest Version**: 1.21.1 (8-16-2024)
 
 **Latest Experimental Version**: 1.18-rc3 (1-31-2024)
 
