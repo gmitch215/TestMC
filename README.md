@@ -152,6 +152,7 @@ jobs:
 
 - [x] CraftBukkit (`craftbukkit`)
 - [x] SpigotMC (`spigot`)
+  - Runtimes using BuildTools (`craftbukkit` and `spigot`) will download the latest **similar** version of the runtime. For example, if you specify `1.21`, it will download the latest similar version, such as `1.21.1`.
 - [x] PaperMC (`paper`)
 - [x] Purpur (`purpur`)
 - [x] Fabric (`fabric`)

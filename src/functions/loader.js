@@ -66,8 +66,17 @@ export function loadServer(callback) {
                     })
 
                     exec.on('exit', () => {
-                        fs.cpSync(`${buildtools}/${runtime['output'].replaceAll('{version}', versions.current)}`, `${folder}/server.jar`)
-                        callback(folder)
+                        const dest = `${folder}/server.jar`
+                        
+                        const currentSrc = `${buildtools}/${runtime['output'].replaceAll('{version}', versions.current)}`
+                        const latestSrc = `${buildtools}/${runtime['output'].replaceAll('{version}', versions.similar(versions.current))}`
+                        if (fs.existsSync(currentSrc)) {
+                            fs.cpSync(currentSrc, dest)
+                            callback(folder)
+                        } else if (fs.existsSync(latestSrc)) {
+                            fs.cpSync(latestSrc, dest)
+                            callback(folder)
+                        }
                     })
                 })
             })
