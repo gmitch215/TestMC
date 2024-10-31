@@ -1,11 +1,14 @@
 import * as core from '@actions/core'
 
 export const versions = {
-    "latest": "1.21.1",
+    "latest": "1.21.3",
     "versions": [
         // Versions must be found from https://hub.spigotmc.org/versions/
+        "1.21.3",
+        "1.21.2",
         "1.21.1",
         "1.21",
+
         "1.20.6",
         "1.20.5",
         "1.20.4",
@@ -71,7 +74,9 @@ export const versions = {
         "1.8"
     ],
     "similar_versions": {
+        "1.21.3": ["1.21.2"],
         "1.21.1": ["1.21"],
+
         "1.20.6": ["1.20.5"],
         "1.20.4": ["1.20.3"],
         "1.20.1": ["1.20"],
