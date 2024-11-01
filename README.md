@@ -134,7 +134,7 @@ jobs:
 
 **Minimum Version**: 1.8
 
-**Latest Version**: 1.21.1 (8-16-2024)
+**Latest Version**: 1.21.3 (11-1-2024)
 
 **Latest Experimental Version**: 1.18-rc3 (1-31-2024)
 
@@ -150,20 +150,20 @@ jobs:
 
 #### Servers
 
-- [x] CraftBukkit (`craftbukkit`)
-- [x] SpigotMC (`spigot`)
+- [x] [CraftBukkit](https://bukkit.org) (`craftbukkit`)
+- [x] [SpigotMC](https://spigotmc.org) (`spigot`)
   - Runtimes using BuildTools (`craftbukkit` and `spigot`) will download the latest **similar** version of the runtime. For example, if you specify `1.21`, it will download the latest similar version, such as `1.21.1`.
-- [x] PaperMC (`paper`)
-- [x] Purpur (`purpur`)
-- [x] Fabric (`fabric`)
+- [x] [Paper](https://github.com/PaperMC/Paper) (`paper`)
+- [x] [Purpur](https://github.com/PurpurMC/Purpur) (`purpur`)
+- [x] [Fabric](https://github.com/FabricMC/fabric) (`fabric`)
   - Your `build` option is **required** and should be specified as `loader version/installer version` (e.g. `0.15.11/1.0.1`).
   - To find your build, visit the [Server Downloader](https://fabricmc.net/use/server/).
 
 #### Server Proxies
 
-- [x] Bungeecord (`bungeecord`)
-- [x] Waterfall (`waterfall`)
-- [x] Velocity (`velocity`)
+- [x] [Bungeecord](https://github.com/SpigotMC/Bungeecord) (`bungeecord`)
+- [x] [Waterfall](https://github.com/PaperMC/Waterfall) (`waterfall`)
+- [x] [Velocity](https://github.com/PaperMC/Velocity) (`velocity`)
 
 ## 🧑🏾‍💻 License
 
