@@ -1,6 +1,7 @@
 export const versions = {
-  "latest": "3.3.0-SNAPSHOT",
+  "latest": "3.4.0-SNAPSHOT",
   "versions": [
+    "3.4.0-SNAPSHOT",
     "3.3.0-SNAPSHOT",
     "3.2.0-SNAPSHOT",
     "3.1.2-SNAPSHOT",
