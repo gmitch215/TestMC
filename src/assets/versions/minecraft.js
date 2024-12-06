@@ -1,9 +1,10 @@
 import * as core from '@actions/core'
 
 export const versions = {
-    "latest": "1.21.3",
+    "latest": "1.21.4",
     "versions": [
         // Versions must be found from https://hub.spigotmc.org/versions/
+        "1.21.4",
         "1.21.3",
         "1.21.2",
         "1.21.1",

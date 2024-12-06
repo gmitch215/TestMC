@@ -134,7 +134,7 @@ jobs:
 
 **Minimum Version**: 1.8
 
-**Latest Version**: 1.21.3 (11-1-2024)
+**Latest Version**: 1.21.4 (12-6-2024)
 
 **Latest Experimental Version**: 1.18-rc3 (1-31-2024)
 
