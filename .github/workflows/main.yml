@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -19,7 +19,7 @@ jobs:
         run: |
           mkdir server
           cd server
-          wget https://piston-data.mojang.com/v1/objects/84196944f1217543890f17ec5700e650495f0a9c/server.jar -O server.jar
+          wget https://piston-data.mojang.com/v1/objects/12214909a0c30a3f9050f24256565f49d32d0c2e/server.jar -O server.jar
           echo "eula=true" > eula.txt
 
       - name: Run Playit.gg and Server
@@ -33,4 +33,4 @@ jobs:
           cd server
           nohup java -Xmx4G -Xms4G -jar server.jar nogui &
           playit -secret $PLAYIT_SECRET
-
+          
