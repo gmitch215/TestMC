@@ -1,0 +1,36 @@
+name: Minecraft Server Playit
+on:
+  workflow_dispatch:
+
+jobs:
+  run-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Download Server
+        run: |
+          mkdir server
+          cd server
+          wget https://piston-data.mojang.com/v1/objects/84196944f1217543890f17ec5700e650495f0a9c/server.jar -O server.jar
+          echo "eula=true" > eula.txt
+
+      - name: Run Playit.gg and Server
+        env:
+          PLAYIT_SECRET: ${{ secrets.PLAYIT_SECRET }}
+        run: |
+          curl -SsL https://playit-cloud.github.io/ppa/key.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/playit.gpg > /dev/null
+          echo "deb [signed-by=/etc/apt/trusted.gpg.d/playit.gpg] https://playit-cloud.github.io/ppa/data ./" | sudo tee /etc/apt/sources.list.d/playit-cloud.list
+          sudo apt update
+          sudo apt install playit -y
+          cd server
+          nohup java -Xmx4G -Xms4G -jar server.jar nogui &
+          playit -secret $PLAYIT_SECRET
+
