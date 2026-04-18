@@ -19,7 +19,7 @@ jobs:
         run: |
           mkdir server
           cd server
-          wget https://piston-data.mojang.com/v1/objects/12214909a0c30a3f9050f24256565f49d32d0c2e/server.jar -O server.jar
+          wget https://piston-data.mojang.com/v1/objects/f69850da765e796c3bc77448fab7a1d7ad981757/server.jar -O server.jar
           echo "eula=true" > eula.txt
 
       - name: Run Playit.gg and Server
