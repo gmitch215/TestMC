@@ -102,11 +102,11 @@ jobs:
       - uses: gmitch215/TestMC@v2
         with:
           path: 'path/to/plugin.jar'
-          runtime: 'purpur'  
+          runtime: 'purpur'
           version: '1.21'
           time: 360
           files: | # Supports Globs; Can contain anything you want to copy
-            .github/test-server/* 
+            .github/test-server/*
             server.properties
           commands: |
             customplace 0 10 0 stone
@@ -116,9 +116,9 @@ jobs:
 ### All Options
 
 | Option Name            | Description                                                                                                             | Required            | Default Value  |
-|------------------------|-------------------------------------------------------------------------------------------------------------------------|---------------------|----------------|
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------- | -------------- |
 | `path`                 | The path to the plugin to test.                                                                                         | **true**            |                |
-| `runtime`              | The runtime option to use.                                                                                              | **true**            |                |
+| `runtime`              | The runtime option to use.                                                                                              | false               | `paper`        |
 | `version`              | The runtime (Minecraft) version to use.                                                                                 | false               | latest version |
 | `time`                 | How long the server should run for, in seconds.                                                                         | false               | `120`          |
 | `build`                | Optionally specify a specific build number for your inputted runtime.                                                   | on `fabric` servers | latest build   |
@@ -134,7 +134,7 @@ jobs:
 
 **Minimum Version**: 1.8
 
-**Latest Version**: 1.21.4 (12-6-2024)
+**Latest Version**: 21.1.2 (5-16-2026)
 
 **Latest Experimental Version**: 1.18-rc3 (1-31-2024)
 
