@@ -8,8 +8,8 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test-server": "node tests/server/index.js",
-    "prettier": "bunx prettier --write .",
-    "prettier:check": "bunx prettier --check .",
+    "prettier": "npx prettier --write .",
+    "prettier:check": "npx prettier --check .",
     "build": "ncc build",
     "prepare": "husky install"
   },
