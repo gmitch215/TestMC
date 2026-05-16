@@ -188,13 +188,33 @@ export function loadServer(callback) {
 					.then((res) => res.json())
 					.then((json) => {
 						if (!build) {
+							const buildsJson = json['builds'];
+
 							if (paper) {
-								const builds = json['builds'];
-								build = builds.reduce((def, current) => {
-									if (current.channel === 'default') return current;
-									return def;
-								}, builds.at(-1))['build'];
-							} else build = Number(json['builds']['latest']);
+								if (Array.isArray(buildsJson) && buildsJson.length > 0) {
+									const selected = buildsJson.reduce((def, current) => {
+										if (current.channel === 'default') return current;
+										return def;
+									}, buildsJson.at(-1));
+
+									build = selected && selected['build'];
+								} else if (buildsJson && typeof buildsJson === 'object' && buildsJson.latest) {
+									build = Number(buildsJson.latest);
+								} else if (json['latest']) {
+									build = Number(json['latest']);
+								} else {
+									throw new TypeError(
+										`Could not determine latest paper build from API response in version ${versions.current}, response: ${JSON.stringify(json)}`
+									);
+								}
+							} else {
+								if (buildsJson && typeof buildsJson === 'object' && buildsJson.latest)
+									build = Number(buildsJson['latest']);
+								else if (Array.isArray(buildsJson) && buildsJson.length > 0)
+									build = Number(buildsJson.at(-1));
+								else if (json['latest']) build = Number(json['latest']);
+								else throw new TypeError('Could not determine latest build from API response');
+							}
 						}
 
 						const url = runtime['url']
