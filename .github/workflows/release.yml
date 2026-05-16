@@ -47,7 +47,7 @@ jobs:
           fromTag: '${{ env.LATEST_TAG }}'
           toTag: '${{ github.ref_name }}'
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ env.VERSION }}${{ github.event.inputs.suffix }}
           name: TestMC v${{ env.VERSION }}${{ github.event.inputs.suffix }}
