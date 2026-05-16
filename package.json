@@ -41,6 +41,6 @@
     "prettier-plugin-organize-imports": "^4.3.0"
   },
   "lint-staged": {
-    "*.{js,css,md}": "prettier --write"
+    "*.{js,md,yml,json,cjs}": "prettier --write"
   }
 }
