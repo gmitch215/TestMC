@@ -18,6 +18,9 @@ jobs:
     permissions:
       contents: write
 
+    environment:
+      name: releaseNewActionVersion
+
     steps:
       - uses: actions/checkout@v6
         with:
@@ -51,3 +54,8 @@ jobs:
           body: ${{ steps.changelog.outputs.changelog || github.event.inputs.changelog }}
           draft: false
           prerelease: ${{ github.ref_name != 'master' }}
+      - name: Update v${{ env.VERSION }}${{ github.event.inputs.suffix }} Tag
+        id: update-major-tag
+        uses: actions/publish-action@v0.4.0
+        with:
+          source-tag: v${{ env.VERSION }}${{ github.event.inputs.suffix }}
