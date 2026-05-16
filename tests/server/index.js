@@ -1,2 +1,2 @@
-import './download.js'
-import '../../src/index.js'
+import '../../src/index.js';
+import './download.js';

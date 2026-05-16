@@ -22,27 +22,27 @@ inputs:
   time:
     description: 'The time to run the server for, in seconds'
     required: false
-    default: "120"
+    default: '120'
   flags:
     description: 'The flags to pass to the server'
     required: false
-    default: ""
+    default: ''
   experimental:
     description: 'Whether to use experimental builds'
     required: false
-    default: "false"
+    default: 'false'
   use-similar-versions:
     description: 'Whether to use found similar versions if the exact version is not found'
     required: false
-    default: "true"
+    default: 'true'
   commands:
     description: 'The commands to run on the server after startup'
     required: false
-    default: ""
+    default: ''
   files:
     description: 'Files to copy into the server before it begins'
     required: false
-    default: ""
+    default: ''
 runs:
   using: 'node20'
   main: 'dist/index.js'
