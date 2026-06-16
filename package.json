@@ -32,7 +32,7 @@
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-env": "^8.0.0",
     "@jest/globals": "^30.0.0",
     "babel-jest": "^30.0.0",
     "husky": "^9.1.7",
